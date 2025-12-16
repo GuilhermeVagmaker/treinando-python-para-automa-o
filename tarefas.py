@@ -44,12 +44,37 @@ def concluir_tarefa():
       tarefa[indice]["concluida"] = True
       print("\nTarefa concluida com sucesso")
       return
+
+def remover_tarefa():
+    
+    if not tarefa:
+        print("Nenhuma tarefa criada ate o momento...")
+        return
+    for i, tarefas in enumerate(tarefa, start = 1):
+      status = "Concluida" if tarefas["concluida"] else "Ainda não concluida"
+      print(f"\n{i}. Tarefa: {tarefas['titulo']} Status: {status}")
+         
+    nmr_tarefa = input("\nqual das tarefas você concluiu? ")
+      
+    if not nmr_tarefa.isdigit():
+      print("Apenas números é valido")
+      return
+    
+    indice = int(nmr_tarefa) - 1
+    
+    if indice < 0 or indice >= len(tarefa):
+      print("Opção inválida!")
+      return
+    
+    remove_tarefa = tarefa.pop(indice)
+    print(f"Tarefa removida: {remove_tarefa["titulo"]} - Tarefa removida com sucesso!!")
       
 while True:
-  print("\n1 - adicionar tarefa")
-  print("2 - listar tarefa")
+  print("\n1 - Adicionar tarefa")
+  print("2 - Listar tarefa")
   print("3 - Concluir tarefa")
-  print("4 - Encerrar")
+  print("4 - Remover tarefa")
+  print("5 - Encerrar")
   
   opcao = input("Escolha: ")
   
@@ -60,23 +85,31 @@ while True:
   elif opcao == "3":
     concluir_tarefa()
   elif opcao == "4":
-    print("Encerrando... Aguarde")
+    remover_tarefa()  
+  elif opcao == "5":
     
-    with open("tarefas.txt", "w") as arquivo:
-      arquivo.write("TAREFAS\n")
-      arquivo.write("====================================================\n")
-      
-      for i in tarefa:
-        status = "Concluida" if i["concluida"] else "Ainda não concluida"
+    print("\n1 - Salvar arquivo")
+    print("2 - Encerrar programa")
+    
+    sub_opcao = input("\nEscolha um dos numeros acima: ")
+    
+    if sub_opcao == "1":
+      with open("tarefas.csv", "w") as arquivo:
+        arquivo.write("Tarefa, Status\n")
         
-        arquivo.write(f"Tarefa: {i['titulo']}\n")
-        arquivo.write(f"Status: {status}\n")
-        arquivo.write("---------------------------------------------------\n")
-      
-      print("arquivo salvo com sucesso!!!!")
-    break
+        for i in tarefa:
+          status = "Concluida" if i["concluida"] else "Ainda não concluida"  
+          arquivo.write(
+            f"{i['titulo']},{status}\n"
+          )
+
+        print("arquivo salvo com sucesso!!!!")
+      break
+    elif sub_opcao == "2":
+      print("Encerrando programa... Aguarde")
+      break
   else:
-    print("opção invalida, Escolha um dos numeros acima")
+    print("\nopção invalida, Escolha um dos numeros acima")
     
 
       
